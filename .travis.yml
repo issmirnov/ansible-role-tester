@@ -8,36 +8,53 @@ python:
 
 services: docker
 
+addons:
+  apt:
+    packages:
+      - tree
+
 env:
   - distro: ubuntu1204
-  - distro: ubuntu1210
-  - distro: ubuntu1304
-  - distro: ubuntu1310
-  - distro: ubuntu1404
-  - distro: ubuntu1410
-  - distro: ubuntu1504
-  - distro: ubuntu1510
-  - distro: ubuntu1604
-  - distro: ubuntu1610
-  - distro: ubuntu1704
-  - distro: ubuntu1710
-  - distro: ubuntu1804
-  - distro: ubuntu1810
-  - distro: centos6
-  - distro: centos7
-  - distro: debian8
-  - distro: debian9
-  - distro: debian10
-  - distro: fedora24
-  - distro: fedora25
-  - distro: fedora26
-  - distro: fedora27
-  - distro: fedora28
+  # - distro: ubuntu1210
+  # - distro: ubuntu1304
+  # - distro: ubuntu1310
+  # - distro: ubuntu1404
+  # - distro: ubuntu1410
+  # - distro: ubuntu1504
+  # - distro: ubuntu1510
+  # - distro: ubuntu1604
+  # - distro: ubuntu1610
+  # - distro: ubuntu1704
+  # - distro: ubuntu1710
+  # - distro: ubuntu1804
+  # - distro: ubuntu1810
+  # - distro: centos6
+  # - distro: centos7
+  # - distro: debian8
+  # - distro: debian9
+  # - distro: debian10
+  # - distro: fedora24
+  # - distro: fedora25
+  # - distro: fedora26
+  # - distro: fedora27
+  # - distro: fedora28
 
 before_install:
   # Install dependencies:
   - sudo pip install --upgrade pip
   - sudo pip install ansible
+  # golang fork fun
+  - echo $TRAVIS_COMMIT
+  - echo $TRAVIS_BUILD_DIR
+  - echo $GOPATH
+  - echo $TRAVIS_HOME
+  - go get github.com/fubarhouse/ansible-role-tester
+  - tree $GOPATH
+  - echo ${TRAVIS_REPO_SLUG}
+  - echo $TRAVIS_REPO_SLUG
+  - cd $GOPATH/src/github.com/fubarhouse/ansible-role-tester
+  - git remote add repo https://github.com/${TRAVIS_REPO_SLUG}.git && git fetch
+  - git checkout $TRAVIS_COMMIT
   # Install golang deps
   - GO111MODULE=on go mod download
   - GO111MODULE=on go install .
